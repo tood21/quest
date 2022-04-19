@@ -5,6 +5,51 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
 } from "firebase/auth";
+import styled from "styled-components";
+
+const AuthTemplete = styled.div`
+  width: 400px;
+  height: 300px;
+  margin: 0 auto;
+  margin-top: 6rem;
+  border-radius: 30px;
+  padding: 30px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  box-shadow: rgba(0, 0, 0, 0.55) 0px 10px 25px;
+`;
+
+const AuthInput = styled.input`
+  display: block;
+  border-radius: 16px;
+  border: 2px solid #000;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: ${(props) => props.color};
+  cursor: ${(props) => props.cursor};
+`;
+
+const AuthForm = styled.form`
+  display: flex;
+  flex-direction: column;
+`;
+
+const AuthDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+`;
+
+const AuthButton = styled.button`
+  display: block;
+  border-radius: 16px;
+  border: 2px solid #000;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: ${(props) => props.color};
+  cursor: ${(props) => props.cursor};
+`;
 
 function Auth() {
   const [email, setEmail] = useState("");
@@ -49,9 +94,9 @@ function Auth() {
   };
 
   return (
-    <div>
-      <form onSubmit={onSubmit}>
-        <input
+    <AuthTemplete>
+      <AuthForm onSubmit={onSubmit}>
+        <AuthInput
           name='email'
           type='text'
           placeholder='Email'
@@ -59,7 +104,7 @@ function Auth() {
           value={email}
           onChange={onChange}
         />
-        <input
+        <AuthInput
           name='password'
           type='password'
           placeholder='Password'
@@ -67,15 +112,20 @@ function Auth() {
           value={password}
           onChange={onChange}
         />
-        <input
+        <AuthInput
+          color='rgb(6, 214, 160)'
+          cursor='pointer'
           type='submit'
           value={newAccount ? "Create Account" : "Sign In"}
         />
-      </form>
-      <div>
-        <button onClick={onClickSocialLogin}>Sign in with Google</button>
-      </div>
-    </div>
+      </AuthForm>
+      <div>or</div>
+      <AuthDiv>
+        <AuthButton cursor='pointer' onClick={onClickSocialLogin}>
+          Sign in with Google
+        </AuthButton>
+      </AuthDiv>
+    </AuthTemplete>
   );
 }
 
