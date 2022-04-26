@@ -3,6 +3,7 @@ import { authService } from '../fbData';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import styled from 'styled-components';
 import '../assets/font/font.css';
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 export default function Auth() {
   const [email, setEmail] = useState("");
@@ -35,14 +36,33 @@ export default function Auth() {
   const toggleAccount = () => {
     setNewAccount((prev) => !prev);
   }
+  // Google Login
+  const loginGoogle = () => {
+    const provider = new GoogleAuthProvider();
+    const auth = getAuth();
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        const user = result.user;
+      }).catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        const email = error.email;
+        const credential = GoogleAuthProvider.credentialFromError(error);
+      })
+  }
+
 
   return (
     <SecMain>
       <WrapMain>
         {newAccount ?
-          <TxtTitle>Quest 회원가입</TxtTitle>
-          : <TxtTitle>Quest 로그인</TxtTitle>
+          <TxtTitle>Quest<TxtBlock>회원가입</TxtBlock></TxtTitle>
+          : <TxtTitle>Quest<TxtBlock>로그인</TxtBlock></TxtTitle>
         }
+        <ImgBat src={require('../assets/img/img_pixel.png')} alt=''/>
+        <ImgDead src={require('../assets/img/img_pixel2.png')} alt=''/>
         <form onSubmit={handleSubmit}>
           <InpEmail
             type='text'
@@ -66,7 +86,7 @@ export default function Auth() {
         </form>
         <WrapBtn>
           <BtnChange type='button' onClick={toggleAccount}>{newAccount ? '로그인하기' : '계정 생성하기'}</BtnChange>
-          <BtnGoogle type='button'>구글 이메일로 로그인</BtnGoogle>
+          <BtnGoogle type='button' onClick={loginGoogle}>구글 이메일로 로그인</BtnGoogle>
         </WrapBtn>
       </WrapMain>
     </SecMain>
@@ -85,13 +105,36 @@ const WrapMain = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   box-shadow: 0 0 10px 2px #00000070;
-  padding: 20px 10px;
+  border-radius: 10px;
+  padding: 20px 30px;
   background-color: #3c4574;
 `
 const TxtTitle = styled.h2`
   margin-bottom: 20px;
-  font-size: 1.6rem;
+  padding: 5px 0 30px;
+  font-size: 2rem;
   text-align: center;
+  color: #c1c1d3;
+`
+const TxtBlock = styled.span`
+  display: block;
+  font-size: 1.3rem;
+  color: #c1c1d3;
+`
+const ImgBat = styled.img`
+  position: absolute;
+  top: 30px;
+  left: 0;
+  width:100px;
+  margin-left: 10px;
+`
+const ImgDead = styled.img`
+  position: absolute;
+  top: 30px;
+  right: 25px;
+  width: 60px;
+  margin-left: 10px;
+  transform: rotateY(180deg);
 `
 const InpEmail = styled.input`
   display: block;
@@ -117,6 +160,7 @@ const BtnLogin = styled.button`
   font-family: 'appleGothic';
   font-size: 1rem;
   font-weight: 700;
+  background-color: #c1c1d3;
 `
 const WrapBtn = styled.div`
   margin-top: 10px;
@@ -125,13 +169,17 @@ const WrapBtn = styled.div`
 const BtnChange = styled.button`
   border: none;
   border-bottom: 1px solid #000;
-  margin-right: 5px;
+  margin-right: 10px;
   font-family: 'appleGothic';
+  font-size: .9rem;
+  color: #000;
   background-color: transparent;
 `
 const BtnGoogle = styled.button`
   border: none;
   border-bottom: 1px solid #000;
   font-family: 'appleGothic';
+  font-size: .9rem;
+  color: #000;
   background-color: transparent;
 `
