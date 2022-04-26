@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Router from "./Router";
 import { authService } from "../fbData";
+import GlobalStyle from "../GlobalStyle";
 
 function App() {
   const [init, setInit] = useState(false);
@@ -18,7 +19,8 @@ function App() {
   
   return (
     <div>
-      {init ? <Router isLoggedIn={isLoggedIn} /> : 'Initializing...'}
+      <GlobalStyle />
+        {init ? <Router isLoggedIn={isLoggedIn} /> : 'Initializing...'}
     </div>
   );
 }
